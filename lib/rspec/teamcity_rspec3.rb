@@ -337,11 +337,14 @@ module Spec
           running_example_full_name = example_data.full_name
 
           debug_log("Example finishing... full example name = [#{running_example_full_name}], duration = #{duration} ms, additional flowid suffix=[#{additional_flowid_suffix}]")
-          diagnostic_info = "rspec [#{::RSpec::Core::Version::STRING}]" + ", f/s=(#{finished_at_ms}, #{example_data.start_time_in_ms}), duration=#{duration}, time.now=#{Time.now.to_s}, raw[:started_at]=#{example.execution_result.started_at.to_s}, raw[:finished_at]=#{example.execution_result.finished_at.to_s}, raw[:run_time]=#{example.execution_result.run_time.to_s}"
+          diagnostic_info = "rspec [#{::RSpec::Core::Version::STRING}]" + ", f/s=(#{finished_at_ms}, #{example_data.start_time_in_ms}), duration=#{duration}, time.now=#{current_time.to_s}, raw[:started_at]=#{example.execution_result.started_at.to_s}, raw[:finished_at]=#{example.execution_result.finished_at.to_s}, raw[:run_time]=#{example.execution_result.run_time.to_s}"
 
           log(@message_factory.create_test_finished(running_example_full_name, duration, ::Rake::TeamCity.is_in_buildserver_mode ? nil : diagnostic_info))
         end
 
+        def current_time
+          Time.respond_to?(:now_without_mock_time) ? Time.now_without_mock_time : Time.now
+        end
 
         def debug_log(string)
           # Logs output.

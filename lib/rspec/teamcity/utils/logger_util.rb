@@ -35,9 +35,13 @@ module Rake
 
         def log_msg(msg, add_proc_thread_info=false)
           if @enabled
-            @log_file << "[#{Time.now}] : #{(add_proc_thread_info ? current_proc_thread_info : "") + " " + msg}\n"
+            @log_file << "[#{current_time}] : #{(add_proc_thread_info ? current_proc_thread_info : "") + " " + msg}\n"
             @log_file.flush
           end
+        end
+
+        def current_time
+          Time.respond_to?(:now_without_mock_time) ? Time.now_without_mock_time : Time.now
         end
 
         def log_block(id, data = nil, add_proc_thread_info=false)

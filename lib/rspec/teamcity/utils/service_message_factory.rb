@@ -248,7 +248,7 @@ module Rake
           end
 
           # add auto timestamp
-          msg_attrs[:timestamp] ||= convert_time_to_java_simple_date(Time.now)
+          msg_attrs[:timestamp] ||= convert_time_to_java_simple_date(current_time)
 
           # message args
           message_args = msg_attrs.map { |k, v| "#{k.to_s} = '#{v.nil? ? "" : replace_escaped_symbols(v.to_s)}'" }.join(" ")
@@ -257,6 +257,10 @@ module Rake
         end
 
         "##teamcity[#{message_name}#{message_args.empty? ? '' : " #{message_args}"}]"
+      end
+
+      def self.current_time
+        Time.respond_to?(:now_without_mock_time) ? Time.now_without_mock_time : Time.now
       end
 
       #noinspection RubyClassMethodNamingConvention

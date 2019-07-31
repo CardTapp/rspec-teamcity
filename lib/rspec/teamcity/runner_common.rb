@@ -22,7 +22,11 @@ module Rake
 
       # Current time in ms
       def get_current_time_in_ms
-        get_time_in_ms(Time.now)
+        get_time_in_ms(current_time)
+      end
+
+      def current_time
+        Time.respond_to?(:now_without_mock_time) ? Time.now_without_mock_time : Time.now
       end
 
       def get_time_in_ms(time)
